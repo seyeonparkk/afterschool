@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
+#include<time.h>
+#include<stdlib.h>
 
 using namespace sf;
 
@@ -9,6 +11,9 @@ int main(void) {
     //잠깐 떴다가 사라지는 건 return 0때문에 프로그램이 종료된 것
     RenderWindow window(VideoMode(640, 480), "AfterSchool");
     window.setFramerateLimit(60);
+
+    srand(time(0));
+
 
     //네모 모양의 플레이어
     RectangleShape player;
@@ -22,7 +27,7 @@ int main(void) {
 
     for (int i = 0; i < 5; i++) {
         enemy[i].setSize(Vector2f(70, 70));
-        enemy[i].setPosition(500, 100*i);
+        enemy[i].setPosition(rand()%640, rand()%480);
         enemy_life[i] = 1;
         enemy[i].setFillColor(Color::Yellow);
     }
