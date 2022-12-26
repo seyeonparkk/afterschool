@@ -15,6 +15,7 @@ int main(void) {
     player.setSize(Vector2f(40, 40));//플레이어 네모 크기
     player.setPosition(100, 100);//플레이어 기본 x, y좌표
     player.setFillColor(Color::Red);//빨간색 네모
+    int player_speed = -100;
 
     //유지 시키는 방법은? -> 무한 반복
     while (window.isOpen()) //윈도우창이 열려있는 동안 계속 반복
@@ -30,16 +31,16 @@ int main(void) {
             }
         }
         if (Keyboard::isKeyPressed(Keyboard::Left)) {
-            player.move(-1, 0);
+            player.move(-player_speed, 0);
         }
-        else if (Keyboard::isKeyPressed(Keyboard::Right)) {
-            player.move(1,0);
+        if (Keyboard::isKeyPressed(Keyboard::Right)) {
+            player.move(player_speed,0);
         }
-        else if (Keyboard::isKeyPressed(Keyboard::Up)) {
-            player.move(0, -1);
+        if (Keyboard::isKeyPressed(Keyboard::Up)) {
+            player.move(0, -player_speed);
         }
-        else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-            player.move(0, 1);
+        if (Keyboard::isKeyPressed(Keyboard::Down)) {
+            player.move(0, player_speed);
        }
         //화면이 열려져 있는 동안 계속 그려야 함
         window.clear(Color::Black);
