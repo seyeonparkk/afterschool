@@ -17,12 +17,17 @@ int main(void) {
     player.setFillColor(Color::Red);//빨간색 네모
     int player_speed = 5;
     
-    RectangleShape enemy;
-    enemy.setSize(Vector2f(70, 70));
-    enemy.setPosition(500, 300);
-    enemy.setFillColor(Color::Yellow);
-    int enemy_life = 1;
+    RectangleShape enemy[5];
+    int enemy_life  [5];
 
+    for (int i = 0; i < 5; i++) {
+        enemy[i].setSize(Vector2f(70, 70));
+        enemy[i].setPosition(500, 100*i);
+        enemy_life[i] = 1;
+        enemy[i].setFillColor(Color::Yellow);
+    }
+ 
+   
 
     //유지 시키는 방법은? -> 무한 반복
     while (window.isOpen()) //윈도우창이 열려있는 동안 계속 반복
@@ -51,21 +56,27 @@ int main(void) {
         }
 
         //enemy충돌
-        if (enemy_life > 0){
-            if (player.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
-                printf("적과 충돌 \n");
-                enemy_life -= 1;
+        for (int i = 0; i < 5; i++) {
+            if (enemy_life[i] > 0) {
+                if (player.getGlobalBounds().intersects(enemy[i].getGlobalBounds())) {
+                    printf("적과 충돌 \n");
+                    enemy_life[i] -= 1;
+                }
             }
-    }
+        }
+        
         //화면이 열려져 있는 동안 계속 그려야 함
         window.clear(Color::Black);
         //draw 나중에 호출할수록 우선순위가 높아짐
-        if(enemy_life>0)
-            window.draw(enemy);
+        for (int i = 0; i < 5; i++) {
+            if (enemy_life[i] > 0)
+                window.draw(enemy[i]);
             window.draw(player);//player 보여주기(그려주기)
-      
-        window.display();
-    }
+
+            window.display();
+        }
+        }
+    
 
     return 0;
 }
