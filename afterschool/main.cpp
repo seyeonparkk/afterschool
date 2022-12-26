@@ -48,6 +48,10 @@ int main(void) {
         if (Keyboard::isKeyPressed(Keyboard::Down)) {
             player.move(0, player_speed);
        }
+
+        if (player.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
+            printf("적과 충돌 \n");
+        }
         //화면이 열려져 있는 동안 계속 그려야 함
         window.clear(Color::Black);
         //draw 나중에 호출할수록 우선순위가 높아짐
