@@ -21,6 +21,7 @@ int main(void) {
     enemy.setSize(Vector2f(70, 70));
     enemy.setPosition(500, 300);
     enemy.setFillColor(Color::Yellow);
+    int enemy_life = 1;
 
 
     //유지 시키는 방법은? -> 무한 반복
@@ -40,23 +41,29 @@ int main(void) {
             player.move(-player_speed, 0);
         }
         if (Keyboard::isKeyPressed(Keyboard::Right)) {
-            player.move(player_speed,0);
+            player.move(player_speed, 0);
         }
         if (Keyboard::isKeyPressed(Keyboard::Up)) {
             player.move(0, -player_speed);
         }
         if (Keyboard::isKeyPressed(Keyboard::Down)) {
             player.move(0, player_speed);
-       }
-
-        if (player.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
-            printf("적과 충돌 \n");
         }
+
+        //enemy충돌
+        if (enemy_life > 0){
+            if (player.getGlobalBounds().intersects(enemy.getGlobalBounds())) {
+                printf("적과 충돌 \n");
+                enemy_life -= 1;
+            }
+    }
         //화면이 열려져 있는 동안 계속 그려야 함
         window.clear(Color::Black);
         //draw 나중에 호출할수록 우선순위가 높아짐
-        window.draw(player);//player 보여주기(그려주기)
-        window.draw(enemy);
+        if(enemy_life>0)
+            window.draw(enemy);
+            window.draw(player);//player 보여주기(그려주기)
+      
         window.display();
     }
 
