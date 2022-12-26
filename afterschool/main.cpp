@@ -42,6 +42,7 @@ int main(void) {
             player.move(0, 1);
        }
         //화면이 열려져 있는 동안 계속 그려야 함
+        window.clear(Color::Black);
         window.draw(player);//player 보여주기(그려주기)
         window.display();
     }
