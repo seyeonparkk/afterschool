@@ -27,9 +27,10 @@ int main(void) {
 
     for (int i = 0; i < 5; i++) {
         enemy[i].setSize(Vector2f(70, 70));
-        enemy[i].setPosition(rand()%640, rand()%480);
-        enemy_life[i] = 1;
         enemy[i].setFillColor(Color::Yellow);
+        enemy_life[i] = 1;
+        enemy[i].setPosition(rand()%300+300, rand()%380);
+    
     }
  
    
