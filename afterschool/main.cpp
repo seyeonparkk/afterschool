@@ -15,7 +15,13 @@ int main(void) {
     player.setSize(Vector2f(40, 40));//플레이어 네모 크기
     player.setPosition(100, 100);//플레이어 기본 x, y좌표
     player.setFillColor(Color::Red);//빨간색 네모
-    int player_speed = -100;
+    int player_speed = 5;
+    
+    RectangleShape enemy;
+    enemy.setSize(Vector2f(70, 70));
+    enemy.setPosition(500, 300);
+    enemy.setFillColor(Color::Yellow);
+
 
     //유지 시키는 방법은? -> 무한 반복
     while (window.isOpen()) //윈도우창이 열려있는 동안 계속 반복
@@ -44,7 +50,9 @@ int main(void) {
        }
         //화면이 열려져 있는 동안 계속 그려야 함
         window.clear(Color::Black);
+        //draw 나중에 호출할수록 우선순위가 높아짐
         window.draw(player);//player 보여주기(그려주기)
+        window.draw(enemy);
         window.display();
     }
 
