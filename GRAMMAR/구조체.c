@@ -1,8 +1,15 @@
 #include<stdio.h>
+struct per {
+	int hp, speed;
+
+};
 void main() {
-	int player_hp = 5;
-	int player_speed= 7;
+	struct per player;
+	player.hp = 5;
+	player.speed = 7;
+
+	struct per enemy;
 	int enemy_hp = 2;
 	int enemy_speed = 5;
-	printf("플레이어의 체력 %d 플레이어 속도 %d\n", player_hp, player_speed);
+	printf("플레이어의 체력 %d 플레이어 속도 %d\n", player.hp, player.speed);
 }
