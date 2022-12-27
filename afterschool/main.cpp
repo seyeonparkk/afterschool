@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include<string.h>
+#include<SFML/Audio.hpp>
 
 
 using namespace sf;
@@ -13,13 +14,18 @@ int main(void) {
     window.setFramerateLimit(60);
 
     srand(time(0));
+    
+    long start_time = clock();
+    long spent_time;
+
+
 
     Font font;
     font.loadFromFile("C:\\Windows\\Fonts\\Arial.ttf");
 
     Text text;
     text.setFont(font);
-    text.setCharacterSize(35);
+    text.setCharacterSize(30);
     text.setFillColor(Color(255, 255, 255));
     text.setPosition(0, 0);
     char info[40];
@@ -36,7 +42,10 @@ int main(void) {
     RectangleShape enemy[5];
     int enemy_life[5];
     int enemy_score = 100;      //적을 잡을 때마다 100점씩 증가
-
+    SoundBuffer enemy_explosion_buffer;
+    enemy_explosion_buffer.loadFromFile("./resources/sound/rumble.flac");
+    Sound enemy_explosion_sound;
+    enemy_explosion_sound.setBuffer(enemy_explosion_buffer);
 
     //enemy 초기화
     for (int i = 0; i < 5; i++) {
@@ -79,7 +88,7 @@ int main(void) {
                                   window.close();
             }
         }
-
+        spent_time = clock();
 
         //플레이어 움직임 구현
         //else를 쓰지 않으면 중간으로 나갈 수 있음 제약이 줄어든다.(동시동작 가능)
@@ -107,12 +116,16 @@ int main(void) {
                     printf("enemy[%d]과 충돌\n", i);
                     enemy_life[i] -= 1;
                     player_score += enemy_score;
+                 if (enemy_life[i] == 0) {
+                     enemy_explosion_sound.play();
+                }
                 }
             }
+   
         }
 
 
-        sprintf(info,"SCORE : %d\n", player_score);    //실시간으로 점수 변경
+        sprintf(info,"SCORE : %d  TIME : %d", player_score,(spent_time-start_time)/1000);    //실시간으로 점수 변경
         text.setString(info);
 
         //60분에 1초마다 그렸다 지웠다를 반복하게 된다. 
