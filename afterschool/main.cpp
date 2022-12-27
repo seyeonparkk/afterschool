@@ -21,9 +21,11 @@ int main(void) {
     player.setPosition(100, 100);//플레이어 기본 x, y좌표
     player.setFillColor(Color::Red);//빨간색 네모
     int player_speed = 5;
+    int player_score = 0;
     
     RectangleShape enemy[5];
     int enemy_life  [5];
+    int enemy_score = 100;
 
     
  
@@ -85,9 +87,11 @@ int main(void) {
                 if (player.getGlobalBounds().intersects(enemy[i].getGlobalBounds())) {
                     printf("적과 충돌 \n");
                     enemy_life[i] -= 1;
+                    player_score = enemy_score;
                 }
             }
         }
+        printf("score %d\n", player_score);
         
         //화면이 열려져 있는 동안 계속 그려야 함
         window.clear(Color::Black);
