@@ -31,7 +31,16 @@ int main(void) {
     char info[40];
     text.setString("SCORE");
 
+    //배경
+    Texture bg_texture;
+    bg_texture.loadFromFile("./resources/images/1.jpg");
+    Sprite bg_sprite;
+    bg_sprite.setTexture(bg_texture);
+    bg_sprite.setPosition(0, 0);
 
+
+
+    //플레이어
     //사각형 창 그리기
     RectangleShape player;
     player.setSize(Vector2f(40, 40));
@@ -130,6 +139,7 @@ int main(void) {
 
         //60분에 1초마다 그렸다 지웠다를 반복하게 된다. 
         window.clear(Color::Black);
+        window.draw(bg_sprite);
 
         for (int i = 0; i < 5; i++)
             if (enemy_life[i] > 0)
