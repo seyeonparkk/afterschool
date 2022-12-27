@@ -1,18 +1,16 @@
 #include <stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int main(void)
+{
+	char str[30] = "score : ";
+	int score = 300;
+	char str2[30];
+	//정수를 문자열로(변환할 정수,적용대상,진수)
+	itoa(score, str2, 10);
 
-int main(void) {
+	stract(str, str2);
+	printf("%s", str);
 
-    char ch[30] = "score : ";
-    char ch2[30] = "300";
-
-    int i = 0;
-    while (ch[i] != '\0')
-        i++;
-
-    for (int j = i; ch2[j - i] != '\0'; j++)
-        ch[j] = ch2[j - i];
-
-    printf("%s\n", ch);
-
-    return 0;
+	return 0;
 }
