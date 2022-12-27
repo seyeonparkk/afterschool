@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <stdlib.h>
 #include <time.h>
+#include<string.h>
+
 
 using namespace sf;
 
@@ -20,6 +22,7 @@ int main(void) {
     text.setCharacterSize(35);
     text.setFillColor(Color(255, 255, 255));
     text.setPosition(0, 0);
+    char info[40];
     text.setString("SCORE");
 
 
@@ -33,6 +36,8 @@ int main(void) {
     RectangleShape enemy[5];
     int enemy_life[5];
     int enemy_score = 100;      //적을 잡을 때마다 100점씩 증가
+
+
     //enemy 초기화
     for (int i = 0; i < 5; i++) {
         enemy[i].setSize(Vector2f(70, 70));
@@ -106,7 +111,9 @@ int main(void) {
             }
         }
 
-        printf("SCORE : %d\n", player_score);
+
+        sprintf(info,"SCORE : %d\n", player_score);    //실시간으로 점수 변경
+        text.setString(info);
 
         //60분에 1초마다 그렸다 지웠다를 반복하게 된다. 
         window.clear(Color::Black);
