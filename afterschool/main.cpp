@@ -34,6 +34,11 @@ struct Enemy {
 	int respawn_time;
 };
 
+//obj1 obj2 충돌여부 충돌 1반환 충돌안하면 0 반환
+int is_collide(RectangleShape obj1, RectangleShape obj2) {
+	return obj1.getGlobalBounds().intersects(obj2.getGlobalBounds());
+}
+
 // 전역변수
 const int ENEMY_NUM = 10;					// enemy의 최대개수
 const int W_WIDTH = 1200, W_HEIGHT = 600;	// 창의 크기
@@ -139,7 +144,7 @@ int main(void)
 			case Event::KeyPressed:
 			{
 				// 스페이스 키 누르면 모든 enemy 다시 출현
-				if (event.key.code == Keyboard::Space)
+				/*if (event.key.code == Keyboard::Space)
 				{
 					for (int i = 0; i < ENEMY_NUM; i++)
 					{
@@ -149,7 +154,7 @@ int main(void)
 						enemy[i].life = 1;
 						enemy[i].speed = -(rand() % 10 + 1);
 					}
-				}
+				}*/
 				break;
 			}
 
@@ -204,9 +209,9 @@ int main(void)
 			if (enemy[i].life > 0)
 			{
 				// enemy와의 충돌
-				if (player.sprite.getGlobalBounds().intersects(enemy[i].sprite.getGlobalBounds())|| bullet.sprite.getGlobalBounds().intersects(enemy[i].sprite.getGlobalBounds()))
+				if (is_collide(player.sprite,enemy[i].sprite) || is_collide(bullet.sprite,enemy[i].sprite))
 				{
-					printf("enemy[%d]과 충돌\n", i);
+					
 					enemy[i].life -= 1;
 					player.score += enemy[i].score;
 
