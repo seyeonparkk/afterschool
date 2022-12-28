@@ -22,6 +22,8 @@ struct Bullet {
 	int is_fired;               //발사 여부
 };
 
+
+
 struct Enemy {
 	RectangleShape sprite;
 	int speed;
@@ -52,7 +54,7 @@ int main(void)
 
 	// BGM
 	SoundBuffer BGM_buffer;
-	BGM_buffer.loadFromFile("./resources/sound/bgm.mp3");
+	BGM_buffer.loadFromFile("./resources/sound/funbgm032014(fun).wav");
 	Sound BGM_sound;
 	BGM_sound.setBuffer(BGM_buffer);
 	BGM_sound.setLoop(1);		// BGM 무한반복
@@ -155,6 +157,8 @@ int main(void)
 		}
 
 		spent_time = clock() - start_time;
+		player.x = player.sprite.getPosition().x;
+		player.y = player.sprite.getPosition().y;
 
 		// 방향키 start
 		if (Keyboard::isKeyPressed(Keyboard::Left))
@@ -174,6 +178,15 @@ int main(void)
 			player.sprite.move(0, player.speed);
 		}	// 방향키 end
 
+		//총알발사
+		if (Keyboard::isKeyPressed(Keyboard::Space)) {
+			//총알이 발사되어있지 않다면
+			if (!bullet.is_fired) {
+				bullet.sprite.setPosition(player.x + 50, player.y + 15);
+				bullet.is_fired = 1;
+			}
+			
+		}
 
 		for (int i = 0; i < ENEMY_NUM; i++)
 		{
@@ -191,7 +204,7 @@ int main(void)
 			if (enemy[i].life > 0)
 			{
 				// enemy와의 충돌
-				if (player.sprite.getGlobalBounds().intersects(enemy[i].sprite.getGlobalBounds()))
+				if (player.sprite.getGlobalBounds().intersects(enemy[i].sprite.getGlobalBounds())|| bullet.sprite.getGlobalBounds().intersects(enemy[i].sprite.getGlobalBounds()))
 				{
 					printf("enemy[%d]과 충돌\n", i);
 					enemy[i].life -= 1;
@@ -214,6 +227,13 @@ int main(void)
 			}
 		}
 
+		//총알이 평생 한번 발사되는 버그를 수정하기
+		if (bullet.is_fired) {
+			bullet.sprite.move(bullet.speed, 0);
+			if (bullet.sprite.getPosition().x > W_WIDTH)
+				bullet.is_fired = 0;
+		}
+
 		if (player.life <= 0)
 		{
 			is_gameover = 1;
@@ -233,6 +253,7 @@ int main(void)
 				window.draw(enemy[i].sprite);
 		window.draw(player.sprite);
 		window.draw(text);
+		if(bullet.is_fired)
 		window.draw(bullet.sprite);
 
 		if (is_gameover)
