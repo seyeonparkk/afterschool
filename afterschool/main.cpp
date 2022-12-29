@@ -1,3 +1,7 @@
+//1. 아이템 속도증가,데미지증가
+//2 총알 시스템 개편
+//3.sound effect
+
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
 #include <stdlib.h>
@@ -18,7 +22,6 @@ struct Player {
 //총알
 struct Bullet {
 	RectangleShape sprite;
-	int speed;
 	int is_fired;               //발사 여부
 };
 
@@ -48,8 +51,10 @@ int is_collide(RectangleShape obj1, RectangleShape obj2) {
 
 // 전역변수
 const int ENEMY_NUM = 10;					// enemy의 최대개수
+const int BULLET_NUM = 50;                 //bullet의 최대개수
 const int W_WIDTH = 1130, W_HEIGHT = 700;	// 창의 크기
 const int GO_WIDTH = 320, GO_HEIGHT = 240;	// 게임오버 그림의 크기
+
 
 
 int main(void)
@@ -114,11 +119,17 @@ int main(void)
 	player.life = 10;
 
 	//총알
-	struct Bullet bullet;
-	bullet.sprite.setSize(Vector2f(10, 10));
-	bullet.sprite.setPosition(player.x+50, player.y+15);            //임시 테스트
-	bullet.speed = 20;
-	bullet.is_fired = 0;
+	int bullet_speed = 20;
+	int bullet_idx = 0;
+
+	struct Bullet bullet [BULLET_NUM];
+	for (int i = 0; i < BULLET_NUM; i++) {
+		bullet[i].sprite.setSize(Vector2f(10, 10));
+		bullet[i].sprite.setPosition(player.x + 50, player.y + 15);            //임시 테스트
+		bullet[i].is_fired = 0;
+	}
+	
+	
 
 	// 적(enemy)
 	struct Enemy enemy[ENEMY_NUM];
@@ -215,13 +226,23 @@ int main(void)
 
 
 		//총알발사
+		printf("bullet_idx %d\n", bullet_idx);
 		if (Keyboard::isKeyPressed(Keyboard::Space)) {
 			//총알이 발사되어있지 않다면
-			if (!bullet.is_fired) {
-				bullet.sprite.setPosition(player.x + 50, player.y + 15);
-				bullet.is_fired = 1;
+			if (!bullet[bullet_idx].is_fired) {
+				bullet[bullet_idx].sprite.setPosition(player.x + 50, player.y + 15);
+				bullet[bullet_idx].is_fired = 1;
+				bullet_idx++;    //다음 총알이 발사할 수 있도록
 			}
 			
+		}
+		for (int i = 0; i < BULLET_NUM; i++) {
+			//총알이 평생 한번 발사되는 버그를 수정하기
+			if (bullet[i].is_fired) {
+				bullet[i].sprite.move(bullet_speed, 0);
+				if (bullet[i].sprite.getPosition().x > W_WIDTH)
+					bullet[i].is_fired = 0;
+			}
 		}
 
 		for (int i = 0; i < ENEMY_NUM; i++)
@@ -260,29 +281,29 @@ int main(void)
 				}
 
 				//총알과 enemy의 충돌
-				if (is_collide(bullet.sprite, enemy[i].sprite))
-				{
-
-					enemy[i].life -= 1;
-					player.score += enemy[i].score;
-
-					// TODO : 코드 refactoring 필요
-					if (enemy[i].life == 0)
+				for (int j = 0; j < BULLET_NUM; j++) {
+					if (is_collide(bullet[j].sprite, enemy[i].sprite))
 					{
-						enemy[i].explosion_sound.play();
-					}
-					bullet.is_fired = 0;
-				}
-				enemy[i].sprite.move(enemy[i].speed, 0);
-			}
-		}
+						if (bullet[j].is_fired) {
+							enemy[i].life -= 1;
+							player.score += enemy[i].score;
 
-		//총알이 평생 한번 발사되는 버그를 수정하기
-		if (bullet.is_fired) {
-			bullet.sprite.move(bullet.speed, 0);
-			if (bullet.sprite.getPosition().x > W_WIDTH)
-				bullet.is_fired = 0;
-		}
+							// TODO : 코드 refactoring 필요
+							if (enemy[i].life == 0)
+							{
+								enemy[i].explosion_sound.play();
+							}
+							bullet[j].is_fired = 0;
+						}
+						enemy[i].sprite.move(enemy[i].speed, 0);
+					}
+				}
+			}
+						}
+						
+				
+
+		
 
 		//게임상태 업데이트
 		if (player.life <= 0)
@@ -304,8 +325,11 @@ int main(void)
 				window.draw(enemy[i].sprite);
 		window.draw(player.sprite);
 		window.draw(text);
-		if(bullet.is_fired)
-		window.draw(bullet.sprite);
+		for (int i = 0; i < BULLET_NUM; i++) {
+			if (bullet[i].is_fired)
+				window.draw(bullet[i].sprite);
+		}
+		
 
 		if (is_gameover)
 		{
