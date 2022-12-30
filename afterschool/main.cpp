@@ -155,7 +155,7 @@ int main(void)
 
 		bullet[i].sprite.setTexture(&t.bullet);
 		bullet[i].is_fired = 0;
-		bullet[i].sprite.setSize(Vector2f(50, 30));
+		bullet[i].sprite.setSize(Vector2f(65, 45));
 		bullet[i].sprite.setPosition(player.x + 50, player.y + 15);		// 임시 테스트
 	}
 
@@ -190,7 +190,7 @@ int main(void)
 
 	for (int i = 0; i < ITEM_NUM; i++)
 	{
-		item[i].sprite.setSize(Vector2f(50, 50));
+		item[i].sprite.setSize(Vector2f(80, 110));
 		item[i].is_presented = 0;
 		item[i].presented_time = 0;
 	}
