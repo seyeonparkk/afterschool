@@ -48,6 +48,7 @@ struct Textures {
 	Texture item_delay;	// 공속 아이템 이미지
 	Texture item_speed;	// 이속 아이템 이미지
 	Texture player;		// 플레이어 이미지
+	Texture bullet;
 };
 
 struct SButters {
@@ -80,6 +81,7 @@ int main(void)
 	t.item_delay.loadFromFile("./resources/images/item_delay.png");
 	t.item_speed.loadFromFile("./resources/images/item_speed.png");
 	t.player.loadFromFile("./resources/images/player.png");
+	t.bullet.loadFromFile("./resources/images/bullet.png");
 
 	struct SButters sb;
 	sb.BGM.loadFromFile("./resources/sounds/bp.flac");
@@ -143,14 +145,17 @@ int main(void)
 	int bullet_idx = 0;
 	int bullet_delay = 500;		// 딜레이 0.5초
 	int bullet_delay_max = 100;
+	
 	Sound bullet_sound;
 	bullet_sound.setBuffer(sb.rumble);
 
 	struct Bullet bullet[BULLET_NUM];
 	for (int i = 0; i < BULLET_NUM; i++)
 	{
+
+		bullet[i].sprite.setTexture(&t.bullet);
 		bullet[i].is_fired = 0;
-		bullet[i].sprite.setSize(Vector2f(10, 10));
+		bullet[i].sprite.setSize(Vector2f(50, 30));
 		bullet[i].sprite.setPosition(player.x + 50, player.y + 15);		// 임시 테스트
 	}
 
