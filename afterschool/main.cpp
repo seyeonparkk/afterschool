@@ -186,7 +186,7 @@ int main(void)
 	item[1].delay = 20000;
 	item[1].type = DELAY;
 	item[1].sound.setBuffer(sb.item_delay);
-	item[1].sound.setVolume(150);
+	item[1].sound.setVolume(300);
 
 	for (int i = 0; i < ITEM_NUM; i++)
 	{ 
