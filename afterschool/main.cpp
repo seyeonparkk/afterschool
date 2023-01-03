@@ -381,13 +381,13 @@ int main(void)
 					switch (item[i].type)
 					{
 					case SPEED:	// player 이동속도
-						player.speed += 2;
+						player.speed += 5;
 
 						if (player.speed > player.speed_max)
 							player.speed = player.speed_max;
 						break;
 					case DELAY:	// player 공격속도
-						bullet_delay -= 100;
+						bullet_delay -= 200;
 
 						if (bullet_delay < bullet_delay_max)
 							bullet_delay = bullet_delay_max;

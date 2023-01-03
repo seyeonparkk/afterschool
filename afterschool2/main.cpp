@@ -6,9 +6,10 @@
 
 using namespace sf;
 
+//전역변수
 const int S = 4;
-const int CARD_W = 200;
-const int CARD_H = 200;
+const int CARD_W = 160;
+const int CARD_H = 180;
 
 struct Card {
 	RectangleShape sprite;
@@ -17,9 +18,10 @@ struct Card {
 	int type;
 	int is_clicked;		// 현재 뒤집혀진 카드인지
 	int is_cleared;		// 정답을 맞춘 카드인지
+	Texture gameover;	// 게임오버 이미지
 };
 
-void swap_card(struct Card* c1, struct Card* c2)
+void swap_card(struct Card* c1, struct Card* c2)        //swap
 {
 	struct Card temp = *c1;
 	*c1 = *c2;
@@ -28,7 +30,7 @@ void swap_card(struct Card* c1, struct Card* c2)
 
 int main(void)
 {
-	RenderWindow window(VideoMode(1200, 800), "AfterSchool2");
+	RenderWindow window(VideoMode(640, 720), "Find Haeun!");
 	window.setFramerateLimit(60);
 
 	Vector2i mouse_pos;
@@ -40,7 +42,7 @@ int main(void)
 
 	srand(time(0));
 
-	Texture t[8 + 1];
+	Texture t[9 + 1];
 	t[0].loadFromFile("./resources/images/ch0.jpg");
 	t[1].loadFromFile("./resources/images/ch1.jpg");
 	t[2].loadFromFile("./resources/images/ch2.jpg");
@@ -50,6 +52,9 @@ int main(void)
 	t[6].loadFromFile("./resources/images/ch6.jpg");
 	t[7].loadFromFile("./resources/images/ch7.jpg");
 	t[8].loadFromFile("./resources/images/ch8.jpg");
+	t[9].loadFromFile("./resources/images/gameover.png");
+
+	
 
 	Font font;
 	font.loadFromFile("c:/Windows/Fonts/arial.ttf");
@@ -76,6 +81,7 @@ int main(void)
 			n++;
 		}
 	}
+	
 
 	// 카드 100번 섞기
 	for (int i = 0; i < 100; i++)
