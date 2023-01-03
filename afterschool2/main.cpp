@@ -28,6 +28,13 @@ void swap_card(struct Card* c1, struct Card* c2)        //swap
 	*c2 = temp;
 }
 
+struct SButters {
+	SoundBuffer card;
+	SoundBuffer correct;
+	SoundBuffer wrong;
+	SoundBuffer BGM;
+};
+
 int main(void)
 {
 	RenderWindow window(VideoMode(640, 720), "Find Haeun!");
@@ -42,6 +49,7 @@ int main(void)
 
 	srand(time(0));
 
+	
 	Texture t[9 + 1];
 	t[0].loadFromFile("./resources/images/ch0.jpg");
 	t[1].loadFromFile("./resources/images/ch1.jpg");
@@ -54,7 +62,12 @@ int main(void)
 	t[8].loadFromFile("./resources/images/ch8.jpg");
 	t[9].loadFromFile("./resources/images/gameover.png");
 
-	
+	struct SButters sb;
+	sb.card.loadFromFile("./resources/sounds/card.ogg");     //카드를 누를때마다 사운드
+	sb.correct.loadFromFile("./resources/sounds/correct.wav");   //카드가 맞을때마다
+	sb.wrong.loadFromFile("./resources/sounds/wrong.flac");   //카드가 틀릴때마다
+	sb.BGM.loadFromFile("./resources/sounds/bp.ogg");
+	  
 
 	Font font;
 	font.loadFromFile("c:/Windows/Fonts/arial.ttf");
@@ -65,6 +78,23 @@ int main(void)
 	text.setFillColor(Color::Red);
 	text.setPosition(0, 0);
 	char info[40];
+
+	// BGM
+	Sound BGM_sound;
+	BGM_sound.setBuffer(sb.BGM);
+	BGM_sound.setVolume(45);
+	BGM_sound.setLoop(1);		// BGM 무한반복
+	BGM_sound.play();
+
+	Sound card_sound;
+	card_sound.setBuffer(sb.card);         //카드 눌렀을때
+
+	Sound wrong_sound;
+	wrong_sound.setBuffer(sb.wrong);    //틀렸을때
+
+	Sound correct_sound;
+	correct_sound.setBuffer(sb.correct);    //맞았을때
+
 
 	struct Card compare_card;	// 첫 번째로 뒤집힌 카드
 	struct Card cards[S][S];
@@ -84,6 +114,7 @@ int main(void)
 	
 
 	// 카드 100번 섞기
+	
 	for (int i = 0; i < 100; i++)
 	{
 		swap_card(&(cards[rand() % S][rand() % S]), &(cards[rand() % S][rand() % S]));
@@ -110,6 +141,7 @@ int main(void)
 		spent_time = clock() - start_time;
 
 		Event event;
+
 		while (window.pollEvent(event))
 		{
 			switch (event.type)
@@ -121,8 +153,10 @@ int main(void)
 				// TODO : 버튼 눌러도 적용 안되는 버그 해결하기
 			case Event::MouseButtonPressed:
 				if (event.mouseButton.button == Mouse::Left)
+				
 				{
 					for (int i = 0; i < S; i++)
+
 					{
 						for (int j = 0; j < S; j++)
 						{
@@ -130,10 +164,12 @@ int main(void)
 							{
 								// 마우스 위치가 cards[i][j]의 위치에 해당한다면?
 								if (cards[i][j].sprite.getGlobalBounds().contains(mouse_pos.x, mouse_pos.y))
+									
 								{
 									// 뒤집혀지지 않은 카드만 뒤집겠다.
 									if (cards[i][j].is_clicked == 0)
 									{
+										card_sound.play();
 										cards[i][j].is_clicked = 1;
 										flipped_num++;
 
@@ -147,13 +183,16 @@ int main(void)
 										{
 											// 두 카드가 같은 종류면
 											if (compare_card.type == cards[i][j].type)
+												
 											{
+												correct_sound.play();
 												cards[i][j].is_cleared = 1;
 												cards[compare_card.id_i][compare_card.id_j].is_cleared = 1;
 											}
 											// 두 카드가 다른 종류이면
-											else
+											else 
 											{
+												wrong_sound.play();
 												delay_time = spent_time;
 											}
 										}
@@ -179,6 +218,7 @@ int main(void)
 					cards[i][j].sprite.setTexture(&t[0]);
 			}
 		}
+
 
 		// 뒤집힌 카드가 2개라면
 		if (flipped_num == 2)
